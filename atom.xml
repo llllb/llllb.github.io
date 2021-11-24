@@ -23,12 +23,11 @@
     <published>2021-11-24T07:49:16.000Z</published>
     <updated>2021-11-24T07:50:37.283Z</updated>
     
-    <content type="html"><![CDATA[<p>title: my new post #文章标题<br>date: 2016-11-12 22:56:29 #发表日期，一般不改动<br>categories: blog #文章文类<br>tags: [博客，文章] #文章标签，多于一项时用这种格式，只有一项时使用tags: blog</p><hr><p>#这里是正文，用markdown写，你可以选择写一段显示在首页的简介后，加上</p><span id="more"></span>#在<!--more-->]]></content>
+    <content type="html"><![CDATA[<p>title: my new post #文章标题<br>date: 2016-11-12 22:56:29 #发表日期，一般不改动<br>categories: blog #文章文类</p><h2 id="tags-博客，文章-文章标签，多于一项时用这种格式，只有一项时使用tags-blog"><a href="#tags-博客，文章-文章标签，多于一项时用这种格式，只有一项时使用tags-blog" class="headerlink" title="tags: [博客，文章] #文章标签，多于一项时用这种格式，只有一项时使用tags: blog"></a>tags: [博客，文章] #文章标签，多于一项时用这种格式，只有一项时使用tags: blog</h2><h1 id="这里是正文，用markdown写，你可以选择写一段显示在首页的简介后，加上"><a href="#这里是正文，用markdown写，你可以选择写一段显示在首页的简介后，加上" class="headerlink" title="这里是正文，用markdown写，你可以选择写一段显示在首页的简介后，加上"></a>这里是正文，用markdown写，你可以选择写一段显示在首页的简介后，加上</h1><span id="more"></span>#在<!--more-->]]></content>
     
     
-    <summary type="html">&lt;p&gt;title: my new post #文章标题&lt;br&gt;date: 2016-11-12 22:56:29 #发表日期，一般不改动&lt;br&gt;categories: blog #文章文类&lt;br&gt;tags: [博客，文章] #文章标签，多于一项时用这种格式，只有一项时使用tags: blog&lt;/p&gt;
-&lt;hr&gt;
-&lt;p&gt;#这里是正文，用markdown写，你可以选择写一段显示在首页的简介后，加上&lt;/p&gt;</summary>
+    <summary type="html">&lt;p&gt;title: my new post #文章标题&lt;br&gt;date: 2016-11-12 22:56:29 #发表日期，一般不改动&lt;br&gt;categories: blog #文章文类&lt;/p&gt;
+&lt;h2 id=&quot;tags-博客，文章-文章标签，多于一项时用这种格式，只有一项时使用tags-blog&quot;&gt;&lt;a href=&quot;#tags-博客，文章-文章标签，多于一项时用这种格式，只有一项时使用tags-blog&quot; class=&quot;headerlink&quot; title=&quot;tags: [博客，文章] #文章标签，多于一项时用这种格式，只有一项时使用tags: blog&quot;&gt;&lt;/a&gt;tags: [博客，文章] #文章标签，多于一项时用这种格式，只有一项时使用tags: blog&lt;/h2&gt;&lt;h1 id=&quot;这里是正文，用markdown写，你可以选择写一段显示在首页的简介后，加上&quot;&gt;&lt;a href=&quot;#这里是正文，用markdown写，你可以选择写一段显示在首页的简介后，加上&quot; class=&quot;headerlink&quot; title=&quot;这里是正文，用markdown写，你可以选择写一段显示在首页的简介后，加上&quot;&gt;&lt;/a&gt;这里是正文，用markdown写，你可以选择写一段显示在首页的简介后，加上&lt;/h1&gt;</summary>
     
     
     
