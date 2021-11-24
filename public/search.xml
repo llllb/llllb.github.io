@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search>
+  <entry>
+    <title>my new post</title>
+    <url>/2021/11/24/my-new-post/</url>
+    <content><![CDATA[<p>title: my new post #文章标题<br>date: 2016-11-12 22:56:29 #发表日期，一般不改动<br>categories: blog #文章文类</p>
+<h2 id="tags-博客，文章-文章标签，多于一项时用这种格式，只有一项时使用tags-blog"><a href="#tags-博客，文章-文章标签，多于一项时用这种格式，只有一项时使用tags-blog" class="headerlink" title="tags: [博客，文章] #文章标签，多于一项时用这种格式，只有一项时使用tags: blog"></a>tags: [博客，文章] #文章标签，多于一项时用这种格式，只有一项时使用tags: blog</h2><h1 id="这里是正文，用markdown写，你可以选择写一段显示在首页的简介后，加上"><a href="#这里是正文，用markdown写，你可以选择写一段显示在首页的简介后，加上" class="headerlink" title="这里是正文，用markdown写，你可以选择写一段显示在首页的简介后，加上"></a>这里是正文，用markdown写，你可以选择写一段显示在首页的简介后，加上</h1><span id="more"></span>#在<!--more-->
+]]></content>
+  </entry>
+  <entry>
+    <title>Hello World</title>
+    <url>/2021/11/24/hello-world/</url>
+    <content><![CDATA[<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2>]]></content>
+  </entry>
+</search>
