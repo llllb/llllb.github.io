@@ -10,4 +10,16 @@
         <category>线程</category>
       </categories>
   </entry>
+  <entry>
+    <title>过滤器(Filter)和拦截器(Interceptor)的区别</title>
+    <url>/2021/11/25/%E8%BF%87%E6%BB%A4%E5%99%A8(Filter)%E5%92%8C%E6%8B%A6%E6%88%AA%E5%99%A8(Interceptor)%E7%9A%84%E5%8C%BA%E5%88%AB/</url>
+    <content><![CDATA[<p>过滤器可以修改request，而拦截器不能</p>
+<p>过滤器只能在请求的前后使用，而拦截器可以详细到每个方法</p>
+<p>过滤器就是筛选出你要的东西，比如request中你要的那部分</p>
+<p>拦截器主要用于安全方面，比如终止一些流程</p>
+]]></content>
+      <categories>
+        <category>Springboot</category>
+      </categories>
+  </entry>
 </search>
