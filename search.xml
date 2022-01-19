@@ -1,21 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>Mybatis全局变量的应用</title>
-    <url>/2021/12/02/Mybatis%E5%85%A8%E5%B1%80%E5%8F%98%E9%87%8F%E7%9A%84%E5%BA%94%E7%94%A8/</url>
-    <content><![CDATA[<figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="attr">mybatis:</span></span><br><span class="line">  <span class="attr">mapper-locations:</span> <span class="string">classpath:mapper/*.xml</span></span><br><span class="line">  <span class="attr">type-aliases-package:</span> <span class="string">com.demo</span></span><br><span class="line">  <span class="attr">configuration:</span></span><br><span class="line">    <span class="attr">variables:</span></span><br><span class="line">      <span class="attr">db1:</span> <span class="string">aaa</span></span><br><span class="line">      <span class="attr">db2:</span> <span class="string">bbb</span></span><br></pre></td></tr></table></figure>
-<p>mybatis.configuration.variables是一个可自定义的全局变量,可以在mapper.xml文件中直接引用。</p>
-<p>在mapper.xml中使用</p>
-<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line">select userName from $&#123;db1&#125;.userInfo</span><br></pre></td></tr></table></figure>
-<p>动态修改配置</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> org.apache.ibatis.session;</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Configuration</span> </span>&#123;</span><br><span class="line">	 <span class="keyword">protected</span> Properties variables;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">org.apache.ibatis.session.Configuration configuration = sqlSessionFactory.getConfiguration();</span><br><span class="line">Properties variables = configuration.getVariables();</span><br><span class="line">variables.setProperty(<span class="string">&quot;userName&quot;</span>, userName);</span><br></pre></td></tr></table></figure>
-]]></content>
-      <categories>
-        <category>Mybatis</category>
-      </categories>
-  </entry>
-  <entry>
     <title>Mysql规范-ORM规约</title>
     <url>/2021/11/26/Mysql%E8%A7%84%E7%BA%A6-ORM%E8%A7%84%E7%BA%A6/</url>
     <content><![CDATA[<h2 id="ORM规约"><a href="#ORM规约" class="headerlink" title="ORM规约"></a>ORM规约</h2><p>1、【强制】在表查询中，一律不要使用 <em> 作为查询的字段列表，需要哪些字段必须明确写明。<br><em>*说明</em></em>：</p>
@@ -32,6 +17,44 @@
 <p>8、【推荐】不要写一个大而全的数据更新接口，传入为 POJO 类，不管是不是自己的目标更新字段，都进行 update table set c1=value1,c2=value2,c3=value3; 这是不对的。执行 SQL时，尽量不要更新无改动的字段，一是易出错 ； 二是效率低 ； 三是 binlog 增加存储。</p>
 <p>9、【参考】@ Transactional 事务不要滥用。事务会影响数据库的 QPS ，另外使用事务的地方需要考虑各方面的回滚方案，包括缓存回滚、搜索引擎回滚、消息补偿、统计修正等。</p>
 <p>10、【参考】&lt; isEqual &gt;中的 compareValue 是与属性值对比的常量，一般是数字，表示相等时带上此条件 ； &lt; isNotEmpty &gt;表示不为空且不为 null 时执行 ； &lt; isNotNull &gt;表示不为 null 值时执行</p>
+]]></content>
+      <categories>
+        <category>Mysql</category>
+      </categories>
+      <tags>
+        <tag>mysq</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Mybatis全局变量的应用</title>
+    <url>/2021/12/02/Mybatis%E5%85%A8%E5%B1%80%E5%8F%98%E9%87%8F%E7%9A%84%E5%BA%94%E7%94%A8/</url>
+    <content><![CDATA[<figure class="highlight yml"><table><tr><td class="code"><pre><span class="line"><span class="attr">mybatis:</span></span><br><span class="line">  <span class="attr">mapper-locations:</span> <span class="string">classpath:mapper/*.xml</span></span><br><span class="line">  <span class="attr">type-aliases-package:</span> <span class="string">com.demo</span></span><br><span class="line">  <span class="attr">configuration:</span></span><br><span class="line">    <span class="attr">variables:</span></span><br><span class="line">      <span class="attr">db1:</span> <span class="string">aaa</span></span><br><span class="line">      <span class="attr">db2:</span> <span class="string">bbb</span></span><br></pre></td></tr></table></figure>
+<p>mybatis.configuration.variables是一个可自定义的全局变量,可以在mapper.xml文件中直接引用。</p>
+<p>在mapper.xml中使用</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line">select userName from $&#123;db1&#125;.userInfo</span><br></pre></td></tr></table></figure>
+<p>动态修改配置</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> org.apache.ibatis.session;</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Configuration</span> </span>&#123;</span><br><span class="line">	 <span class="keyword">protected</span> Properties variables;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">org.apache.ibatis.session.Configuration configuration = sqlSessionFactory.getConfiguration();</span><br><span class="line">Properties variables = configuration.getVariables();</span><br><span class="line">variables.setProperty(<span class="string">&quot;userName&quot;</span>, userName);</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>Mybatis</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>Mysql规范-SQL规约</title>
+    <url>/2021/11/26/Mysql%E8%A7%84%E7%BA%A6-SQL%E8%A7%84%E7%BA%A6/</url>
+    <content><![CDATA[<h2 id="SQL规约"><a href="#SQL规约" class="headerlink" title="SQL规约"></a>SQL规约</h2><p>1、【强制】不要使用 count( 列名 ) 或 count( 常量 ) 来替代 count( <em> ) ， count( </em> ) 就是 SQL 92 定义的标准统计行数的语法，跟数据库无关，跟 NULL 和非 NULL 无关。<br><strong>说明</strong>： count( * ) 会统计值为 NULL 的行，而 count( 列名 ) 不会统计此列为 NULL 值的行。</p>
+<p>2、【强制】 count(distinct col) 计算该列除 NULL 之外的不重复数量。注意 count(distinct<br>col 1, col 2 ) 如果其中一列全为 NULL ，那么即使另一列有不同的值，也返回为 0。</p>
+<p>3、【强制】当某一列的值全是 NULL 时， count(col) 的返回结果为 0，但 sum(col) 的返回结果为NULL ，因此使用 sum() 时需注意 NPE 问题。</p>
+<p>正例：可以使用如下方式来避免 sum 的 NPE 问题： SELECT IF(ISNULL(SUM(g)) ,0, SUM(g)) FROM table;</p>
+<p>4、【强制】使用 ISNULL() 来判断是否为 NULL 值。注意： NULL 与任何值的直接比较都为 NULL。<br><strong>说明</strong>：<br>1 ） NULL&lt;&gt;NULL 的返回结果是 NULL ，而不是 false 。<br>2 ） NULL=NULL 的返回结果是 NULL ，而不是 true 。<br>3 ） NULL&lt;&gt;1 的返回结果是 NULL ，而不是 true 。</p>
+<p>5、【强制】 在代码中写分页查询逻辑时，若 count 为 0 应直接返回，避免执行后面的分页语句。</p>
+<p>6、【强制】不得使用外键与级联，一切外键概念必须在应用层解决。<br><strong>说明</strong>： （ 概念解释 ） 学生表中的 student <em> id 是主键，那么成绩表中的 student </em> id 则为外键。如果更新学生表中的 student <em> id ，同时触发成绩表中的 student </em> id 更新，则为级联更新。外键与级联更新适用于单机低并发，不适合分布式、高并发集群 ； 级联更新是强阻塞，存在数据库更新风暴的风险 ； 外键影响数据库的插入速度。</p>
+<p>7、【强制】禁止使用存储过程，存储过程难以调试和扩展，更没有移植性。</p>
+<p>8、【强制】数据订正时，删除和修改记录时，要先 select ，避免出现误删除，确认无误才能执行更新语句。</p>
+<p>9、【推荐】 in 操作能避免则避免，若实在避免不了，需要仔细评估 in 后边的集合元素数量，控制在 1000 个之内。</p>
+<p>10、【参考】如果有全球化需要，所有的字符存储与表示，均以 utf -8 编码，那么字符计数方法注意：<br><strong>说明</strong>：<br>SELECT LENGTH( “轻松工作” )； 返回为 12<br>SELECT CHARACTER _ LENGTH( “轻松工作” )； 返回为 4<br>如果要使用表情，那么使用 utfmb 4 来进行存储，注意它与 utf -8 编码的区别。</p>
+<p>11、【参考】 TRUNCATE TABLE 比 DELETE 速度快，且使用的系统和事务日志资源少，但 TRUNCATE无事务且不触发 trigger ，有可能造成事故，故不建议在开发代码中使用此语句。<br><strong>说明</strong>： TRUNCATE TABLE 在功能上与不带 WHERE 子句的 DELETE 语句相同。</p>
 ]]></content>
       <categories>
         <category>Mysql</category>
@@ -77,49 +100,6 @@
       </tags>
   </entry>
   <entry>
-    <title>时间复杂度怎么计算</title>
-    <url>/2022/01/19/%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6%E6%80%8E%E4%B9%88%E8%AE%A1%E7%AE%97/</url>
-    <content><![CDATA[<h3 id="大O表示法"><a href="#大O表示法" class="headerlink" title="大O表示法"></a>大O表示法</h3><p>上面的时间复杂度的表示还是较复杂，我们一般都使用大O表示法来简化表示时间复杂度。</p>
-<p>1、复杂度为常数，如23，9999，等等 都表示为O(1)</p>
-<p>2、复杂度包含n时，省略系数与常数项，只取n的最高阶项</p>
-<p> 如：2n+45 为 O(n) ； 4n^3+6n^2+n 为O(n^3)</p>
-<p>3、复杂度为对数时：如log5(n)、log2(n) 等等 都表示为 O(logn)</p>
-<p>4、省略低阶，只取高阶 (即取最大的)</p>
-<p> 如：logn+nlogn 表示为O(nlogn)</p>
-<p><strong>复杂度的大小</strong></p>
-<p>O(1) &lt; O(logn) &lt; O(n) &lt; O(nlogn) &lt; O(n^2) &lt; O(n^3) &lt; O(2^n) &lt; O(n!) &lt; O(n^n)</p>
-<p>复杂度越小，则说明你的代码越好</p>
-<p>那么上面的 method1~method9 用大O表示法如下：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">method1: 1+1+1 = 3   即O(1)</span><br><span class="line">method2: 1+(5+1)+5+5 = 17   即O(1)</span><br><span class="line">method3: 3n+2   即O(n)</span><br><span class="line">method4: 3n^2+4n+2   即O(n^2)</span><br><span class="line">method5: 49n+2   即O(n)</span><br><span class="line">method6: 2log2(n)+1   即O(logn)</span><br><span class="line">method7: 2log5(n)+1   即O(logn)</span><br><span class="line">method8: 2nlog2(n)+4log2(n)+2   即O(nlogn)</span><br><span class="line">method9: 2n+2+4*((1/2)n^2+(1/2)n)+1   即O(n^2)</span><br></pre></td></tr></table></figure>
-]]></content>
-      <categories>
-        <category>Java</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>Mysql规范-SQL规约</title>
-    <url>/2021/11/26/Mysql%E8%A7%84%E7%BA%A6-SQL%E8%A7%84%E7%BA%A6/</url>
-    <content><![CDATA[<h2 id="SQL规约"><a href="#SQL规约" class="headerlink" title="SQL规约"></a>SQL规约</h2><p>1、【强制】不要使用 count( 列名 ) 或 count( 常量 ) 来替代 count( <em> ) ， count( </em> ) 就是 SQL 92 定义的标准统计行数的语法，跟数据库无关，跟 NULL 和非 NULL 无关。<br><strong>说明</strong>： count( * ) 会统计值为 NULL 的行，而 count( 列名 ) 不会统计此列为 NULL 值的行。</p>
-<p>2、【强制】 count(distinct col) 计算该列除 NULL 之外的不重复数量。注意 count(distinct<br>col 1, col 2 ) 如果其中一列全为 NULL ，那么即使另一列有不同的值，也返回为 0。</p>
-<p>3、【强制】当某一列的值全是 NULL 时， count(col) 的返回结果为 0，但 sum(col) 的返回结果为NULL ，因此使用 sum() 时需注意 NPE 问题。</p>
-<p>正例：可以使用如下方式来避免 sum 的 NPE 问题： SELECT IF(ISNULL(SUM(g)) ,0, SUM(g)) FROM table;</p>
-<p>4、【强制】使用 ISNULL() 来判断是否为 NULL 值。注意： NULL 与任何值的直接比较都为 NULL。<br><strong>说明</strong>：<br>1 ） NULL&lt;&gt;NULL 的返回结果是 NULL ，而不是 false 。<br>2 ） NULL=NULL 的返回结果是 NULL ，而不是 true 。<br>3 ） NULL&lt;&gt;1 的返回结果是 NULL ，而不是 true 。</p>
-<p>5、【强制】 在代码中写分页查询逻辑时，若 count 为 0 应直接返回，避免执行后面的分页语句。</p>
-<p>6、【强制】不得使用外键与级联，一切外键概念必须在应用层解决。<br><strong>说明</strong>： （ 概念解释 ） 学生表中的 student <em> id 是主键，那么成绩表中的 student </em> id 则为外键。如果更新学生表中的 student <em> id ，同时触发成绩表中的 student </em> id 更新，则为级联更新。外键与级联更新适用于单机低并发，不适合分布式、高并发集群 ； 级联更新是强阻塞，存在数据库更新风暴的风险 ； 外键影响数据库的插入速度。</p>
-<p>7、【强制】禁止使用存储过程，存储过程难以调试和扩展，更没有移植性。</p>
-<p>8、【强制】数据订正时，删除和修改记录时，要先 select ，避免出现误删除，确认无误才能执行更新语句。</p>
-<p>9、【推荐】 in 操作能避免则避免，若实在避免不了，需要仔细评估 in 后边的集合元素数量，控制在 1000 个之内。</p>
-<p>10、【参考】如果有全球化需要，所有的字符存储与表示，均以 utf -8 编码，那么字符计数方法注意：<br><strong>说明</strong>：<br>SELECT LENGTH( “轻松工作” )； 返回为 12<br>SELECT CHARACTER _ LENGTH( “轻松工作” )； 返回为 4<br>如果要使用表情，那么使用 utfmb 4 来进行存储，注意它与 utf -8 编码的区别。</p>
-<p>11、【参考】 TRUNCATE TABLE 比 DELETE 速度快，且使用的系统和事务日志资源少，但 TRUNCATE无事务且不触发 trigger ，有可能造成事故，故不建议在开发代码中使用此语句。<br><strong>说明</strong>： TRUNCATE TABLE 在功能上与不带 WHERE 子句的 DELETE 语句相同。</p>
-]]></content>
-      <categories>
-        <category>Mysql</category>
-      </categories>
-      <tags>
-        <tag>mysq</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Mysql规范-索引规约</title>
     <url>/2021/11/26/Mysql%E8%A7%84%E7%BA%A6-%E7%B4%A2%E5%BC%95%E8%A7%84%E7%BA%A6/</url>
     <content><![CDATA[<h2 id="索引规约"><a href="#索引规约" class="headerlink" title="索引规约"></a>索引规约</h2><p>1、【强制】业务上具有唯一特性的字段，即使是组合字段，也必须建成唯一索引。<br><strong>说明</strong>：不要以为唯一索引影响了 insert 速度，这个速度损耗可以忽略，但提高查找速度是明<br>显的 ； 另外，即使在应用层做了非常完善的校验和控制，只要没有唯一索引，根据墨菲定律，必然有脏数据产生。</p>
@@ -146,6 +126,26 @@
       <tags>
         <tag>mysq</tag>
       </tags>
+  </entry>
+  <entry>
+    <title>时间复杂度怎么计算</title>
+    <url>/2022/01/19/%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6%E6%80%8E%E4%B9%88%E8%AE%A1%E7%AE%97/</url>
+    <content><![CDATA[<h3 id="大O表示法"><a href="#大O表示法" class="headerlink" title="大O表示法"></a>大O表示法</h3><p>上面的时间复杂度的表示还是较复杂，我们一般都使用大O表示法来简化表示时间复杂度。</p>
+<p>1、复杂度为常数，如23，9999，等等 都表示为O(1)</p>
+<p>2、复杂度包含n时，省略系数与常数项，只取n的最高阶项</p>
+<p> 如：2n+45 为 O(n) ； 4n^3+6n^2+n 为O(n^3)</p>
+<p>3、复杂度为对数时：如log5(n)、log2(n) 等等 都表示为 O(logn)</p>
+<p>4、省略低阶，只取高阶 (即取最大的)</p>
+<p> 如：logn+nlogn 表示为O(nlogn)</p>
+<p><strong>复杂度的大小</strong></p>
+<p>O(1) &lt; O(logn) &lt; O(n) &lt; O(nlogn) &lt; O(n^2) &lt; O(n^3) &lt; O(2^n) &lt; O(n!) &lt; O(n^n)</p>
+<p>复杂度越小，则说明你的代码越好</p>
+<p>那么上面的 method1~method9 用大O表示法如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">method1: 1+1+1 = 3   即O(1)</span><br><span class="line">method2: 1+(5+1)+5+5 = 17   即O(1)</span><br><span class="line">method3: 3n+2   即O(n)</span><br><span class="line">method4: 3n^2+4n+2   即O(n^2)</span><br><span class="line">method5: 49n+2   即O(n)</span><br><span class="line">method6: 2log2(n)+1   即O(logn)</span><br><span class="line">method7: 2log5(n)+1   即O(logn)</span><br><span class="line">method8: 2nlog2(n)+4log2(n)+2   即O(nlogn)</span><br><span class="line">method9: 2n+2+4*((1/2)n^2+(1/2)n)+1   即O(n^2)</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>Java</category>
+      </categories>
   </entry>
   <entry>
     <title>线程池最佳边界值计算</title>
