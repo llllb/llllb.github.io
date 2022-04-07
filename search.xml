@@ -16,42 +16,6 @@
       </categories>
   </entry>
   <entry>
-    <title>Mysql规约-建表规约</title>
-    <url>/2021/11/26/Mysql%E8%A7%84%E7%BA%A6-%E5%BB%BA%E8%A1%A8%E8%A7%84%E7%BA%A6/</url>
-    <content><![CDATA[<h2 id="建表规约"><a href="#建表规约" class="headerlink" title="建表规约"></a>建表规约</h2><p>1、【强制】表达是与否概念的字段，必须使用 is _ xxx 的方式命名，数据类型是 <strong>unsigned tinyint</strong>（ 1 表示是，0 表示否 ） ，此规则同样适用于 odps 建表。<br><strong>说明</strong>：任何字段如果为非负数，必须是 unsigned 。</p>
-<ul>
-<li>正例：表达逻辑删除的字段名 is_deleted ，1 表示删除，0 表示未删除。</li>
-<li>也可以用类似deletedflag这样的字段，便于扩展数据类型用【unsigned tinyint】</li>
-</ul>
-<p>2、【强制】表名、字段名必须使用小写字母或数字 ； 禁止出现数字开头，禁止两个下划线中间只出现数字。数据库字段名的修改代价很大，因为无法进行预发布，所以字段名称需要慎重考虑。</p>
-<p><strong>说明</strong>：<code>MySQL</code> 在<code>Windows</code> 下不区分大小写，但在 `Linux`` 下默认是区分大小写。因此，数据库名、表名、字段名，都不允许出现任何大写字母，避免节外生枝。<br>正例： getter <em> admin ， task </em> config ， level 3_ name<br>反例： GetterAdmin ， taskConfig ， level 3 name</p>
-<p>3、【强制】表名不使用复数名词。<br><strong>说明</strong>：表名应该仅仅表示表里面的实体内容，不应该表示实体数量，对应于 DO 类名也是单数形式，符合表达习惯。</p>
-<p>4、【强制】禁用保留字，如 desc 、 range 、 match 、 delayed 等，请参考 MySQL 官方保留字<em>。</em></p>
-<p>5、【强制】唯一索引名为 uk <em>字段名 ； 普通索引名则为 idx</em> <em>字段名。</em><br><strong>*说明</strong>： uk<em> </em>即 unique key；idx* 即 index 的简称。</p>
-<p>6、【强制】小数类型为 decimal ，禁止使用 float 和 double 。<br><strong>说明</strong>： float 和 double 在存储的时候，存在精度损失的问题，很可能在值的比较时，得到不<br>正确的结果。如果存储的数据范围超过 decimal 的范围，建议将数据拆成整数和小数分开存储。</p>
-<p>7、【强制】如果存储的字符串长度几乎相等，使用 char 定长字符串类型。</p>
-<p>8、【强制】 varchar 是可变长字符串，不预先分配存储空间，长度不要超过 5000，如果存储长度大于此值，定义字段类型为 text ，独立出来一张表，用主键来对应，避免影响其它字段索引效率。</p>
-<p>9、【强制】表必备三字段： id , gmt <em> create , gmt </em> modified 。<br><strong>说明</strong>：其中 id 必为主键，类型为 unsigned bigint 、单表时自增、步长为 1。 gmt <em> create ,gmt </em> modified 的类型均为 date _ time 类型。前者现在时表示主动创建，后者过去分词表示被动更新。<em>也可用create_time和modify_time</em></p>
-<p>10、【推荐】表的命名最好是加上“业务名称<em>表的作用”。<br>正例： tiger </em> task / tiger <em> reader / mpp </em> config</p>
-<p>11、【推荐】库名与应用名称尽量一致。</p>
-<p>12、【推荐】如果修改字段含义或对字段表示的状态追加时，需要及时更新字段注释。</p>
-<p>13、【推荐】字段允许适当冗余，以提高性能，但是必须考虑数据同步的情况。冗余字段应遵循：</p>
-<ul>
-<li>不是频繁修改的字段。</li>
-<li>不是 varchar 超长字段，更不能是 text 字段。<br>正例：商品类目名称使用频率高，字段长度短，名称基本一成不变，可在相关联的表中冗余存储类目名称，避免关联查询。</li>
-</ul>
-<p>14、【推荐】单表行数超过 500 万行或者单表容量超过 2 GB ，才推荐进行分库分表。<br><strong>说明</strong>：如果预计三年后的数据量根本达不到这个级别，请不要在创建表时就分库分表。</p>
-<p>15、【参考】合适的字符存储长度，不但节约数据库表空间、节约索引存储，更重要的是提升检索速度。<br>正例：人的年龄用 unsigned tinyint（ 表示范围 0-255，人的寿命不会超过 255 岁 ）； 海龟就必须是 smallint ，但如果是太阳的年龄，就必须是 int； 如果是所有恒星的年龄都加起来，那么就必须使用 bigint 。</p>
-<p><img src="https://pic3.zhimg.com/v2-aecb59906d48382e51db3af97e2b194a_b.jpg" alt="img"></p>
-]]></content>
-      <categories>
-        <category>Mysql</category>
-      </categories>
-      <tags>
-        <tag>mysql</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Mysql规范-ORM规约</title>
     <url>/2021/11/26/Mysql%E8%A7%84%E7%BA%A6-ORM%E8%A7%84%E7%BA%A6/</url>
     <content><![CDATA[<h2 id="ORM规约"><a href="#ORM规约" class="headerlink" title="ORM规约"></a>ORM规约</h2><p>1、【强制】在表查询中，一律不要使用 <em> 作为查询的字段列表，需要哪些字段必须明确写明。<br><em>*说明</em></em>：</p>
@@ -100,6 +64,42 @@
       </tags>
   </entry>
   <entry>
+    <title>Mysql规约-建表规约</title>
+    <url>/2021/11/26/Mysql%E8%A7%84%E7%BA%A6-%E5%BB%BA%E8%A1%A8%E8%A7%84%E7%BA%A6/</url>
+    <content><![CDATA[<h2 id="建表规约"><a href="#建表规约" class="headerlink" title="建表规约"></a>建表规约</h2><p>1、【强制】表达是与否概念的字段，必须使用 is _ xxx 的方式命名，数据类型是 <strong>unsigned tinyint</strong>（ 1 表示是，0 表示否 ） ，此规则同样适用于 odps 建表。<br><strong>说明</strong>：任何字段如果为非负数，必须是 unsigned 。</p>
+<ul>
+<li>正例：表达逻辑删除的字段名 is_deleted ，1 表示删除，0 表示未删除。</li>
+<li>也可以用类似deletedflag这样的字段，便于扩展数据类型用【unsigned tinyint】</li>
+</ul>
+<p>2、【强制】表名、字段名必须使用小写字母或数字 ； 禁止出现数字开头，禁止两个下划线中间只出现数字。数据库字段名的修改代价很大，因为无法进行预发布，所以字段名称需要慎重考虑。</p>
+<p><strong>说明</strong>：<code>MySQL</code> 在<code>Windows</code> 下不区分大小写，但在 `Linux`` 下默认是区分大小写。因此，数据库名、表名、字段名，都不允许出现任何大写字母，避免节外生枝。<br>正例： getter <em> admin ， task </em> config ， level 3_ name<br>反例： GetterAdmin ， taskConfig ， level 3 name</p>
+<p>3、【强制】表名不使用复数名词。<br><strong>说明</strong>：表名应该仅仅表示表里面的实体内容，不应该表示实体数量，对应于 DO 类名也是单数形式，符合表达习惯。</p>
+<p>4、【强制】禁用保留字，如 desc 、 range 、 match 、 delayed 等，请参考 MySQL 官方保留字<em>。</em></p>
+<p>5、【强制】唯一索引名为 uk <em>字段名 ； 普通索引名则为 idx</em> <em>字段名。</em><br><strong>*说明</strong>： uk<em> </em>即 unique key；idx* 即 index 的简称。</p>
+<p>6、【强制】小数类型为 decimal ，禁止使用 float 和 double 。<br><strong>说明</strong>： float 和 double 在存储的时候，存在精度损失的问题，很可能在值的比较时，得到不<br>正确的结果。如果存储的数据范围超过 decimal 的范围，建议将数据拆成整数和小数分开存储。</p>
+<p>7、【强制】如果存储的字符串长度几乎相等，使用 char 定长字符串类型。</p>
+<p>8、【强制】 varchar 是可变长字符串，不预先分配存储空间，长度不要超过 5000，如果存储长度大于此值，定义字段类型为 text ，独立出来一张表，用主键来对应，避免影响其它字段索引效率。</p>
+<p>9、【强制】表必备三字段： id , gmt <em> create , gmt </em> modified 。<br><strong>说明</strong>：其中 id 必为主键，类型为 unsigned bigint 、单表时自增、步长为 1。 gmt <em> create ,gmt </em> modified 的类型均为 date _ time 类型。前者现在时表示主动创建，后者过去分词表示被动更新。<em>也可用create_time和modify_time</em></p>
+<p>10、【推荐】表的命名最好是加上“业务名称<em>表的作用”。<br>正例： tiger </em> task / tiger <em> reader / mpp </em> config</p>
+<p>11、【推荐】库名与应用名称尽量一致。</p>
+<p>12、【推荐】如果修改字段含义或对字段表示的状态追加时，需要及时更新字段注释。</p>
+<p>13、【推荐】字段允许适当冗余，以提高性能，但是必须考虑数据同步的情况。冗余字段应遵循：</p>
+<ul>
+<li>不是频繁修改的字段。</li>
+<li>不是 varchar 超长字段，更不能是 text 字段。<br>正例：商品类目名称使用频率高，字段长度短，名称基本一成不变，可在相关联的表中冗余存储类目名称，避免关联查询。</li>
+</ul>
+<p>14、【推荐】单表行数超过 500 万行或者单表容量超过 2 GB ，才推荐进行分库分表。<br><strong>说明</strong>：如果预计三年后的数据量根本达不到这个级别，请不要在创建表时就分库分表。</p>
+<p>15、【参考】合适的字符存储长度，不但节约数据库表空间、节约索引存储，更重要的是提升检索速度。<br>正例：人的年龄用 unsigned tinyint（ 表示范围 0-255，人的寿命不会超过 255 岁 ）； 海龟就必须是 smallint ，但如果是太阳的年龄，就必须是 int； 如果是所有恒星的年龄都加起来，那么就必须使用 bigint 。</p>
+<p><img src="https://pic3.zhimg.com/v2-aecb59906d48382e51db3af97e2b194a_b.jpg" alt="img"></p>
+]]></content>
+      <categories>
+        <category>Mysql</category>
+      </categories>
+      <tags>
+        <tag>mysql</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Mysql规范-索引规约</title>
     <url>/2021/11/26/Mysql%E8%A7%84%E7%BA%A6-%E7%B4%A2%E5%BC%95%E8%A7%84%E7%BA%A6/</url>
     <content><![CDATA[<h2 id="索引规约"><a href="#索引规约" class="headerlink" title="索引规约"></a>索引规约</h2><p>1、【强制】业务上具有唯一特性的字段，即使是组合字段，也必须建成唯一索引。<br><strong>说明</strong>：不要以为唯一索引影响了 insert 速度，这个速度损耗可以忽略，但提高查找速度是明<br>显的 ； 另外，即使在应用层做了非常完善的校验和控制，只要没有唯一索引，根据墨菲定律，必然有脏数据产生。</p>
@@ -126,26 +126,6 @@
       <tags>
         <tag>mysq</tag>
       </tags>
-  </entry>
-  <entry>
-    <title>时间复杂度怎么计算</title>
-    <url>/2022/01/19/%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6%E6%80%8E%E4%B9%88%E8%AE%A1%E7%AE%97/</url>
-    <content><![CDATA[<h3 id="大O表示法"><a href="#大O表示法" class="headerlink" title="大O表示法"></a>大O表示法</h3><p>上面的时间复杂度的表示还是较复杂，我们一般都使用大O表示法来简化表示时间复杂度。</p>
-<p>1、复杂度为常数，如23，9999，等等 都表示为O(1)</p>
-<p>2、复杂度包含n时，省略系数与常数项，只取n的最高阶项</p>
-<p> 如：2n+45 为 O(n) ； 4n^3+6n^2+n 为O(n^3)</p>
-<p>3、复杂度为对数时：如log5(n)、log2(n) 等等 都表示为 O(logn)</p>
-<p>4、省略低阶，只取高阶 (即取最大的)</p>
-<p> 如：logn+nlogn 表示为O(nlogn)</p>
-<p><strong>复杂度的大小</strong></p>
-<p>O(1) &lt; O(logn) &lt; O(n) &lt; O(nlogn) &lt; O(n^2) &lt; O(n^3) &lt; O(2^n) &lt; O(n!) &lt; O(n^n)</p>
-<p>复杂度越小，则说明你的代码越好</p>
-<p>那么上面的 method1~method9 用大O表示法如下：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">method1: 1+1+1 = 3   即O(1)</span><br><span class="line">method2: 1+(5+1)+5+5 = 17   即O(1)</span><br><span class="line">method3: 3n+2   即O(n)</span><br><span class="line">method4: 3n^2+4n+2   即O(n^2)</span><br><span class="line">method5: 49n+2   即O(n)</span><br><span class="line">method6: 2log2(n)+1   即O(logn)</span><br><span class="line">method7: 2log5(n)+1   即O(logn)</span><br><span class="line">method8: 2nlog2(n)+4log2(n)+2   即O(nlogn)</span><br><span class="line">method9: 2n+2+4*((1/2)n^2+(1/2)n)+1   即O(n^2)</span><br></pre></td></tr></table></figure>
-]]></content>
-      <categories>
-        <category>Java</category>
-      </categories>
   </entry>
   <entry>
     <title>事务失效的12种场景</title>
@@ -332,15 +312,23 @@ public void doOtherThing() &#123;
       </categories>
   </entry>
   <entry>
-    <title>过滤器(Filter)和拦截器(Interceptor)的区别</title>
-    <url>/2021/11/25/%E8%BF%87%E6%BB%A4%E5%99%A8(Filter)%E5%92%8C%E6%8B%A6%E6%88%AA%E5%99%A8(Interceptor)%E7%9A%84%E5%8C%BA%E5%88%AB/</url>
-    <content><![CDATA[<p>过滤器可以修改request，而拦截器不能</p>
-<p>过滤器只能在请求的前后使用，而拦截器可以详细到每个方法</p>
-<p>过滤器就是筛选出你要的东西，比如request中你要的那部分</p>
-<p>拦截器主要用于安全方面，比如终止一些流程</p>
+    <title>时间复杂度怎么计算</title>
+    <url>/2022/01/19/%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6%E6%80%8E%E4%B9%88%E8%AE%A1%E7%AE%97/</url>
+    <content><![CDATA[<h3 id="大O表示法"><a href="#大O表示法" class="headerlink" title="大O表示法"></a>大O表示法</h3><p>上面的时间复杂度的表示还是较复杂，我们一般都使用大O表示法来简化表示时间复杂度。</p>
+<p>1、复杂度为常数，如23，9999，等等 都表示为O(1)</p>
+<p>2、复杂度包含n时，省略系数与常数项，只取n的最高阶项</p>
+<p> 如：2n+45 为 O(n) ； 4n^3+6n^2+n 为O(n^3)</p>
+<p>3、复杂度为对数时：如log5(n)、log2(n) 等等 都表示为 O(logn)</p>
+<p>4、省略低阶，只取高阶 (即取最大的)</p>
+<p> 如：logn+nlogn 表示为O(nlogn)</p>
+<p><strong>复杂度的大小</strong></p>
+<p>O(1) &lt; O(logn) &lt; O(n) &lt; O(nlogn) &lt; O(n^2) &lt; O(n^3) &lt; O(2^n) &lt; O(n!) &lt; O(n^n)</p>
+<p>复杂度越小，则说明你的代码越好</p>
+<p>那么上面的 method1~method9 用大O表示法如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">method1: 1+1+1 = 3   即O(1)</span><br><span class="line">method2: 1+(5+1)+5+5 = 17   即O(1)</span><br><span class="line">method3: 3n+2   即O(n)</span><br><span class="line">method4: 3n^2+4n+2   即O(n^2)</span><br><span class="line">method5: 49n+2   即O(n)</span><br><span class="line">method6: 2log2(n)+1   即O(logn)</span><br><span class="line">method7: 2log5(n)+1   即O(logn)</span><br><span class="line">method8: 2nlog2(n)+4log2(n)+2   即O(nlogn)</span><br><span class="line">method9: 2n+2+4*((1/2)n^2+(1/2)n)+1   即O(n^2)</span><br></pre></td></tr></table></figure>
 ]]></content>
       <categories>
-        <category>Springboot</category>
+        <category>Java</category>
       </categories>
   </entry>
   <entry>
@@ -351,6 +339,18 @@ public void doOtherThing() &#123;
 ]]></content>
       <categories>
         <category>线程</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>过滤器(Filter)和拦截器(Interceptor)的区别</title>
+    <url>/2021/11/25/%E8%BF%87%E6%BB%A4%E5%99%A8(Filter)%E5%92%8C%E6%8B%A6%E6%88%AA%E5%99%A8(Interceptor)%E7%9A%84%E5%8C%BA%E5%88%AB/</url>
+    <content><![CDATA[<p>过滤器可以修改request，而拦截器不能</p>
+<p>过滤器只能在请求的前后使用，而拦截器可以详细到每个方法</p>
+<p>过滤器就是筛选出你要的东西，比如request中你要的那部分</p>
+<p>拦截器主要用于安全方面，比如终止一些流程</p>
+]]></content>
+      <categories>
+        <category>Springboot</category>
       </categories>
   </entry>
 </search>

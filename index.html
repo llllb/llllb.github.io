@@ -552,98 +552,6 @@ public void doOtherThing() &#123;
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2021/11/26/Mysql%E8%A7%84%E7%BA%A6-%E5%BB%BA%E8%A1%A8%E8%A7%84%E7%BA%A6/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Jack Liu">
-      <meta itemprop="description" content="hello world">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="打上花火">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/11/26/Mysql%E8%A7%84%E7%BA%A6-%E5%BB%BA%E8%A1%A8%E8%A7%84%E7%BA%A6/" class="post-title-link" itemprop="url">Mysql规约-建表规约</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2021-11-26 14:11:22 / 修改时间：16:18:20" itemprop="dateCreated datePublished" datetime="2021-11-26T14:11:22+08:00">2021-11-26</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Mysql/" itemprop="url" rel="index"><span itemprop="name">Mysql</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="建表规约"><a href="#建表规约" class="headerlink" title="建表规约"></a>建表规约</h2><p>1、【强制】表达是与否概念的字段，必须使用 is _ xxx 的方式命名，数据类型是 <strong>unsigned tinyint</strong>（ 1 表示是，0 表示否 ） ，此规则同样适用于 odps 建表。<br><strong>说明</strong>：任何字段如果为非负数，必须是 unsigned 。</p>
-<ul>
-<li>正例：表达逻辑删除的字段名 is_deleted ，1 表示删除，0 表示未删除。</li>
-<li>也可以用类似deletedflag这样的字段，便于扩展数据类型用【unsigned tinyint】</li>
-</ul>
-<p>2、【强制】表名、字段名必须使用小写字母或数字 ； 禁止出现数字开头，禁止两个下划线中间只出现数字。数据库字段名的修改代价很大，因为无法进行预发布，所以字段名称需要慎重考虑。</p>
-<p><strong>说明</strong>：<code>MySQL</code> 在<code>Windows</code> 下不区分大小写，但在 `Linux`` 下默认是区分大小写。因此，数据库名、表名、字段名，都不允许出现任何大写字母，避免节外生枝。<br>正例： getter <em> admin ， task </em> config ， level 3_ name<br>反例： GetterAdmin ， taskConfig ， level 3 name</p>
-<p>3、【强制】表名不使用复数名词。<br><strong>说明</strong>：表名应该仅仅表示表里面的实体内容，不应该表示实体数量，对应于 DO 类名也是单数形式，符合表达习惯。</p>
-<p>4、【强制】禁用保留字，如 desc 、 range 、 match 、 delayed 等，请参考 MySQL 官方保留字<em>。</em></p>
-<p>5、【强制】唯一索引名为 uk <em>字段名 ； 普通索引名则为 idx</em> <em>字段名。</em><br><strong>*说明</strong>： uk<em> </em>即 unique key；idx* 即 index 的简称。</p>
-<p>6、【强制】小数类型为 decimal ，禁止使用 float 和 double 。<br><strong>说明</strong>： float 和 double 在存储的时候，存在精度损失的问题，很可能在值的比较时，得到不<br>正确的结果。如果存储的数据范围超过 decimal 的范围，建议将数据拆成整数和小数分开存储。</p>
-<p>7、【强制】如果存储的字符串长度几乎相等，使用 char 定长字符串类型。</p>
-<p>8、【强制】 varchar 是可变长字符串，不预先分配存储空间，长度不要超过 5000，如果存储长度大于此值，定义字段类型为 text ，独立出来一张表，用主键来对应，避免影响其它字段索引效率。</p>
-<p>9、【强制】表必备三字段： id , gmt <em> create , gmt </em> modified 。<br><strong>说明</strong>：其中 id 必为主键，类型为 unsigned bigint 、单表时自增、步长为 1。 gmt <em> create ,gmt </em> modified 的类型均为 date _ time 类型。前者现在时表示主动创建，后者过去分词表示被动更新。<em>也可用create_time和modify_time</em></p>
-<p>10、【推荐】表的命名最好是加上“业务名称<em>表的作用”。<br>正例： tiger </em> task / tiger <em> reader / mpp </em> config</p>
-<p>11、【推荐】库名与应用名称尽量一致。</p>
-<p>12、【推荐】如果修改字段含义或对字段表示的状态追加时，需要及时更新字段注释。</p>
-<p>13、【推荐】字段允许适当冗余，以提高性能，但是必须考虑数据同步的情况。冗余字段应遵循：</p>
-<ul>
-<li>不是频繁修改的字段。</li>
-<li>不是 varchar 超长字段，更不能是 text 字段。<br>正例：商品类目名称使用频率高，字段长度短，名称基本一成不变，可在相关联的表中冗余存储类目名称，避免关联查询。</li>
-</ul>
-<p>14、【推荐】单表行数超过 500 万行或者单表容量超过 2 GB ，才推荐进行分库分表。<br><strong>说明</strong>：如果预计三年后的数据量根本达不到这个级别，请不要在创建表时就分库分表。</p>
-<p>15、【参考】合适的字符存储长度，不但节约数据库表空间、节约索引存储，更重要的是提升检索速度。<br>正例：人的年龄用 unsigned tinyint（ 表示范围 0-255，人的寿命不会超过 255 岁 ）； 海龟就必须是 smallint ，但如果是太阳的年龄，就必须是 int； 如果是所有恒星的年龄都加起来，那么就必须使用 bigint 。</p>
-<p><img src="https://pic3.zhimg.com/v2-aecb59906d48382e51db3af97e2b194a_b.jpg" alt="img"></p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2021/11/26/Mysql%E8%A7%84%E7%BA%A6-ORM%E8%A7%84%E7%BA%A6/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -785,6 +693,98 @@ public void doOtherThing() &#123;
 <p>9、【推荐】 in 操作能避免则避免，若实在避免不了，需要仔细评估 in 后边的集合元素数量，控制在 1000 个之内。</p>
 <p>10、【参考】如果有全球化需要，所有的字符存储与表示，均以 utf -8 编码，那么字符计数方法注意：<br><strong>说明</strong>：<br>SELECT LENGTH( “轻松工作” )； 返回为 12<br>SELECT CHARACTER _ LENGTH( “轻松工作” )； 返回为 4<br>如果要使用表情，那么使用 utfmb 4 来进行存储，注意它与 utf -8 编码的区别。</p>
 <p>11、【参考】 TRUNCATE TABLE 比 DELETE 速度快，且使用的系统和事务日志资源少，但 TRUNCATE无事务且不触发 trigger ，有可能造成事故，故不建议在开发代码中使用此语句。<br><strong>说明</strong>： TRUNCATE TABLE 在功能上与不带 WHERE 子句的 DELETE 语句相同。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/11/26/Mysql%E8%A7%84%E7%BA%A6-%E5%BB%BA%E8%A1%A8%E8%A7%84%E7%BA%A6/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Jack Liu">
+      <meta itemprop="description" content="hello world">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="打上花火">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/11/26/Mysql%E8%A7%84%E7%BA%A6-%E5%BB%BA%E8%A1%A8%E8%A7%84%E7%BA%A6/" class="post-title-link" itemprop="url">Mysql规约-建表规约</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-11-26 14:11:22 / 修改时间：16:18:20" itemprop="dateCreated datePublished" datetime="2021-11-26T14:11:22+08:00">2021-11-26</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Mysql/" itemprop="url" rel="index"><span itemprop="name">Mysql</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="建表规约"><a href="#建表规约" class="headerlink" title="建表规约"></a>建表规约</h2><p>1、【强制】表达是与否概念的字段，必须使用 is _ xxx 的方式命名，数据类型是 <strong>unsigned tinyint</strong>（ 1 表示是，0 表示否 ） ，此规则同样适用于 odps 建表。<br><strong>说明</strong>：任何字段如果为非负数，必须是 unsigned 。</p>
+<ul>
+<li>正例：表达逻辑删除的字段名 is_deleted ，1 表示删除，0 表示未删除。</li>
+<li>也可以用类似deletedflag这样的字段，便于扩展数据类型用【unsigned tinyint】</li>
+</ul>
+<p>2、【强制】表名、字段名必须使用小写字母或数字 ； 禁止出现数字开头，禁止两个下划线中间只出现数字。数据库字段名的修改代价很大，因为无法进行预发布，所以字段名称需要慎重考虑。</p>
+<p><strong>说明</strong>：<code>MySQL</code> 在<code>Windows</code> 下不区分大小写，但在 `Linux`` 下默认是区分大小写。因此，数据库名、表名、字段名，都不允许出现任何大写字母，避免节外生枝。<br>正例： getter <em> admin ， task </em> config ， level 3_ name<br>反例： GetterAdmin ， taskConfig ， level 3 name</p>
+<p>3、【强制】表名不使用复数名词。<br><strong>说明</strong>：表名应该仅仅表示表里面的实体内容，不应该表示实体数量，对应于 DO 类名也是单数形式，符合表达习惯。</p>
+<p>4、【强制】禁用保留字，如 desc 、 range 、 match 、 delayed 等，请参考 MySQL 官方保留字<em>。</em></p>
+<p>5、【强制】唯一索引名为 uk <em>字段名 ； 普通索引名则为 idx</em> <em>字段名。</em><br><strong>*说明</strong>： uk<em> </em>即 unique key；idx* 即 index 的简称。</p>
+<p>6、【强制】小数类型为 decimal ，禁止使用 float 和 double 。<br><strong>说明</strong>： float 和 double 在存储的时候，存在精度损失的问题，很可能在值的比较时，得到不<br>正确的结果。如果存储的数据范围超过 decimal 的范围，建议将数据拆成整数和小数分开存储。</p>
+<p>7、【强制】如果存储的字符串长度几乎相等，使用 char 定长字符串类型。</p>
+<p>8、【强制】 varchar 是可变长字符串，不预先分配存储空间，长度不要超过 5000，如果存储长度大于此值，定义字段类型为 text ，独立出来一张表，用主键来对应，避免影响其它字段索引效率。</p>
+<p>9、【强制】表必备三字段： id , gmt <em> create , gmt </em> modified 。<br><strong>说明</strong>：其中 id 必为主键，类型为 unsigned bigint 、单表时自增、步长为 1。 gmt <em> create ,gmt </em> modified 的类型均为 date _ time 类型。前者现在时表示主动创建，后者过去分词表示被动更新。<em>也可用create_time和modify_time</em></p>
+<p>10、【推荐】表的命名最好是加上“业务名称<em>表的作用”。<br>正例： tiger </em> task / tiger <em> reader / mpp </em> config</p>
+<p>11、【推荐】库名与应用名称尽量一致。</p>
+<p>12、【推荐】如果修改字段含义或对字段表示的状态追加时，需要及时更新字段注释。</p>
+<p>13、【推荐】字段允许适当冗余，以提高性能，但是必须考虑数据同步的情况。冗余字段应遵循：</p>
+<ul>
+<li>不是频繁修改的字段。</li>
+<li>不是 varchar 超长字段，更不能是 text 字段。<br>正例：商品类目名称使用频率高，字段长度短，名称基本一成不变，可在相关联的表中冗余存储类目名称，避免关联查询。</li>
+</ul>
+<p>14、【推荐】单表行数超过 500 万行或者单表容量超过 2 GB ，才推荐进行分库分表。<br><strong>说明</strong>：如果预计三年后的数据量根本达不到这个级别，请不要在创建表时就分库分表。</p>
+<p>15、【参考】合适的字符存储长度，不但节约数据库表空间、节约索引存储，更重要的是提升检索速度。<br>正例：人的年龄用 unsigned tinyint（ 表示范围 0-255，人的寿命不会超过 255 岁 ）； 海龟就必须是 smallint ，但如果是太阳的年龄，就必须是 int； 如果是所有恒星的年龄都加起来，那么就必须使用 bigint 。</p>
+<p><img src="https://pic3.zhimg.com/v2-aecb59906d48382e51db3af97e2b194a_b.jpg" alt="img"></p>
 
       
     </div>
