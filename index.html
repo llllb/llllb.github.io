@@ -181,7 +181,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2022-04-07 11:14:16 / 修改时间：11:15:14" itemprop="dateCreated datePublished" datetime="2022-04-07T11:14:16+08:00">2022-04-07</time>
+              <time title="创建时间：2022-04-07 11:14:16 / 修改时间：11:27:40" itemprop="dateCreated datePublished" datetime="2022-04-07T11:14:16+08:00">2022-04-07</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -207,44 +207,12 @@
           <p>一 事务不生效<br>1.访问权限问题<br>众所周知，java的访问权限主要有四种：private、default、protected、public，它们的权限从左到右，依次变大。</p>
 <p>但如果我们在开发过程中，把有某些事务方法，定义了错误的访问权限，就会导致事务功能出问题，例如：</p>
 <p>@Service<br>public class UserService {</p>
-<pre><code>@Transactional
-private void add(UserModel userModel) &#123;
-     saveData(userModel);
-     updateData(userModel);
-&#125;
-</code></pre><p>}<br>我们可以看到add方法的访问权限被定义成了private，这样会导致事务失效，spring要求被代理方法必须是public的。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Transactional</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">add</span><span class="params">(UserModel userModel)</span> </span>&#123;</span><br><span class="line">     saveData(userModel);</span><br><span class="line">     updateData(userModel);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>}<br>我们可以看到add方法的访问权限被定义成了private，这样会导致事务失效，spring要求被代理方法必须是public的。</p>
 <p>说白了，在AbstractFallbackTransactionAttributeSource类的computeTransactionAttribute方法中有个判断，如果目标方法不是public，则TransactionAttribute返回null，即不支持事务。</p>
 <p>protected TransactionAttribute computeTransactionAttribute(Method method, @Nullable Class&lt;?&gt; targetClass) {<br>    // Don’t allow no-public methods as required.<br>    if (allowPublicMethodsOnly() &amp;&amp; !Modifier.isPublic(method.getModifiers())) {<br>      return null;<br>    }</p>
-<pre><code>// The method may be on an interface, but we need attributes from the target class.
-// If the target class is null, the method will be unchanged.
-Method specificMethod = AopUtils.getMostSpecificMethod(method, targetClass);
-
-// First try is the method in the target class.
-TransactionAttribute txAttr = findTransactionAttribute(specificMethod);
-if (txAttr != null) &#123;
-  return txAttr;
-&#125;
-
-// Second try is the transaction attribute on the target class.
-txAttr = findTransactionAttribute(specificMethod.getDeclaringClass());
-if (txAttr != null &amp;&amp; ClassUtils.isUserLevelMethod(method)) &#123;
-  return txAttr;
-&#125;
-
-if (specificMethod != method) &#123;
-  // Fallback is to look at the original method.
-  txAttr = findTransactionAttribute(method);
-  if (txAttr != null) &#123;
-    return txAttr;
-  &#125;
-  // Last fallback is the class of the original method.
-  txAttr = findTransactionAttribute(method.getDeclaringClass());
-  if (txAttr != null &amp;&amp; ClassUtils.isUserLevelMethod(method)) &#123;
-    return txAttr;
-  &#125;
-&#125;
-return null;
-</code></pre><p>  }<br>也就是说，如果我们自定义的事务方法（即目标方法），它的访问权限不是public，而是private、default或protected的话，spring则不会提供事务功能。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// The method may be on an interface, but we need attributes from the target class.</span></span><br><span class="line"><span class="comment">// If the target class is null, the method will be unchanged.</span></span><br><span class="line">Method specificMethod = AopUtils.getMostSpecificMethod(method, targetClass);</span><br><span class="line"></span><br><span class="line"><span class="comment">// First try is the method in the target class.</span></span><br><span class="line">TransactionAttribute txAttr = findTransactionAttribute(specificMethod);</span><br><span class="line"><span class="keyword">if</span> (txAttr != <span class="keyword">null</span>) &#123;</span><br><span class="line">  <span class="keyword">return</span> txAttr;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Second try is the transaction attribute on the target class.</span></span><br><span class="line">txAttr = findTransactionAttribute(specificMethod.getDeclaringClass());</span><br><span class="line"><span class="keyword">if</span> (txAttr != <span class="keyword">null</span> &amp;&amp; ClassUtils.isUserLevelMethod(method)) &#123;</span><br><span class="line">  <span class="keyword">return</span> txAttr;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (specificMethod != method) &#123;</span><br><span class="line">  <span class="comment">// Fallback is to look at the original method.</span></span><br><span class="line">  txAttr = findTransactionAttribute(method);</span><br><span class="line">  <span class="keyword">if</span> (txAttr != <span class="keyword">null</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> txAttr;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">// Last fallback is the class of the original method.</span></span><br><span class="line">  txAttr = findTransactionAttribute(method.getDeclaringClass());</span><br><span class="line">  <span class="keyword">if</span> (txAttr != <span class="keyword">null</span> &amp;&amp; ClassUtils.isUserLevelMethod(method)) &#123;</span><br><span class="line">    <span class="keyword">return</span> txAttr;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">return</span> <span class="keyword">null</span>;</span><br></pre></td></tr></table></figure>
+<p>  }<br>也就是说，如果我们自定义的事务方法（即目标方法），它的访问权限不是public，而是private、default或protected的话，spring则不会提供事务功能。</p>
 <ol>
 <li>方法用final修饰<br>有时候，某个方法不想被子类重新，这时可以将该方法定义成final的。普通方法这样定义是没问题的，但如果将事务方法定义成final，例如：</li>
 </ol>
@@ -352,128 +320,53 @@ public void doOtherThing() &#123;
 <p>你所要做的事情很简单，只需要配置spring.datasource相关参数即可。</p>
 <p>但如果你使用的还是传统的spring项目，则需要在applicationContext.xml文件中，手动配置事务相关参数。如果忘了配置，事务肯定是不会生效的。</p>
 <p>具体配置如下信息：</p>
-<!-- 配置事务管理器 --> 
-<p><bean class="org.springframework.jdbc.datasource.DataSourceTransactionManager" id="transactionManager"><br>    <property name="dataSource" ref="dataSource"></property> 
-</bean> </p>
-<p><tx:advice id="advice" transaction-manager="transactionManager"><br>    <tx:attributes><br>        <tx:method name="*" propagation="REQUIRED"/><br>    &lt;/tx:attributes&gt;<br>&lt;/tx:advice&gt;<br><!-- 用切点把事务切进去 --> </p>
-<p><aop:config><br>    <aop:pointcut expression="execution(* com.susan.*.*(..))" id="pointcut"/><br>    <aop:advisor advice-ref="advice" pointcut-ref="pointcut"/><br>&lt;/aop:config&gt;<br>默默的说一句，如果在pointcut标签中的切入点匹配规则，配错了的话，有些类的事务也不会生效。</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- 配置事务管理器 --&gt;</span> </span><br><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">class</span>=<span class="string">&quot;org.springframework.jdbc.datasource.DataSourceTransactionManager&quot;</span> <span class="attr">id</span>=<span class="string">&quot;transactionManager&quot;</span>&gt;</span> </span><br><span class="line">    <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;dataSource&quot;</span> <span class="attr">ref</span>=<span class="string">&quot;dataSource&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">property</span>&gt;</span> </span><br><span class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span> </span><br><span class="line"><span class="tag">&lt;<span class="name">tx:advice</span> <span class="attr">id</span>=<span class="string">&quot;advice&quot;</span> <span class="attr">transaction-manager</span>=<span class="string">&quot;transactionManager&quot;</span>&gt;</span> </span><br><span class="line">    <span class="tag">&lt;<span class="name">tx:attributes</span>&gt;</span> </span><br><span class="line">        <span class="tag">&lt;<span class="name">tx:method</span> <span class="attr">name</span>=<span class="string">&quot;*&quot;</span> <span class="attr">propagation</span>=<span class="string">&quot;REQUIRED&quot;</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">tx:attributes</span>&gt;</span> </span><br><span class="line"><span class="tag">&lt;/<span class="name">tx:advice</span>&gt;</span> </span><br><span class="line"><span class="comment">&lt;!-- 用切点把事务切进去 --&gt;</span> </span><br><span class="line"><span class="tag">&lt;<span class="name">aop:config</span>&gt;</span> </span><br><span class="line">    <span class="tag">&lt;<span class="name">aop:pointcut</span> <span class="attr">expression</span>=<span class="string">&quot;execution(* com.susan.*.*(..))&quot;</span> <span class="attr">id</span>=<span class="string">&quot;pointcut&quot;</span>/&gt;</span> </span><br><span class="line">    <span class="tag">&lt;<span class="name">aop:advisor</span> <span class="attr">advice-ref</span>=<span class="string">&quot;advice&quot;</span> <span class="attr">pointcut-ref</span>=<span class="string">&quot;pointcut&quot;</span>/&gt;</span> </span><br><span class="line"><span class="tag">&lt;/<span class="name">aop:config</span>&gt;</span> </span><br></pre></td></tr></table></figure>
+<p>默默的说一句，如果在pointcut标签中的切入点匹配规则，配错了的话，有些类的事务也不会生效。</p>
 <p>二 事务不回滚<br>1.错误的传播特性<br>其实，我们在使用@Transactional注解时，是可以指定propagation参数的。</p>
 <p>该参数的作用是指定事务的传播特性，spring目前支持7种传播特性：</p>
 <p>REQUIRED 如果当前上下文中存在事务，那么加入该事务，如果不存在事务，创建一个事务，这是默认的传播属性值。<br>SUPPORTS 如果当前上下文存在事务，则支持事务加入事务，如果不存在事务，则使用非事务的方式执行。<br>MANDATORY 如果当前上下文中存在事务，否则抛出异常。<br>REQUIRES_NEW 每次都会新建一个事务，并且同时将上下文中的事务挂起，执行当前新建事务完成以后，上下文事务恢复再执行。<br>NOT_SUPPORTED 如果当前上下文中存在事务，则挂起当前事务，然后新的方法在没有事务的环境中执行。<br>NEVER 如果当前上下文中存在事务，则抛出异常，否则在无事务环境上执行代码。<br>NESTED 如果当前上下文中存在事务，则嵌套事务执行，如果不存在事务，则新建事务。<br>如果我们在手动设置propagation参数的时候，把传播特性设置错了，比如：</p>
 <p>@Service<br>public class UserService {</p>
-<pre><code>@Transactional(propagation = Propagation.NEVER)
-public void add(UserModel userModel) &#123;
-    saveData(userModel);
-    updateData(userModel);
-&#125;
-</code></pre><p>}<br>我们可以看到add方法的事务传播特性定义成了Propagation.NEVER，这种类型的传播特性不支持事务，如果有事务则会抛异常。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Transactional(propagation = Propagation.NEVER)</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">add</span><span class="params">(UserModel userModel)</span> </span>&#123;</span><br><span class="line">    saveData(userModel);</span><br><span class="line">    updateData(userModel);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>}<br>我们可以看到add方法的事务传播特性定义成了Propagation.NEVER，这种类型的传播特性不支持事务，如果有事务则会抛异常。</p>
 <p>目前只有这三种传播特性才会创建新事务：REQUIRED，REQUIRES_NEW，NESTED。</p>
 <p>2.自己吞了异常<br>事务不会回滚，最常见的问题是：开发者在代码中手动try…catch了异常。比如：</p>
 <p>@Slf4j<br>@Service<br>public class UserService {</p>
-<pre><code>@Transactional
-public void add(UserModel userModel) &#123;
-    try &#123;
-        saveData(userModel);
-        updateData(userModel);
-    &#125; catch (Exception e) &#123;
-        log.error(e.getMessage(), e);
-    &#125;
-&#125;
-</code></pre><p>}<br>这种情况下spring事务当然不会回滚，因为开发者自己捕获了异常，又没有手动抛出，换句话说就是把异常吞掉了。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Transactional</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">add</span><span class="params">(UserModel userModel)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        saveData(userModel);</span><br><span class="line">        updateData(userModel);</span><br><span class="line">    &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">        log.error(e.getMessage(), e);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>}<br>这种情况下spring事务当然不会回滚，因为开发者自己捕获了异常，又没有手动抛出，换句话说就是把异常吞掉了。</p>
 <p>如果想要spring事务能够正常回滚，必须抛出它能够处理的异常。如果没有抛异常，则spring认为程序是正常的。</p>
 <p>3.手动抛了别的异常<br>即使开发者没有手动捕获异常，但如果抛的异常不正确，spring事务也不会回滚。</p>
 <p>@Slf4j<br>@Service<br>public class UserService {</p>
-<pre><code>@Transactional
-public void add(UserModel userModel) throws Exception &#123;
-    try &#123;
-         saveData(userModel);
-         updateData(userModel);
-    &#125; catch (Exception e) &#123;
-        log.error(e.getMessage(), e);
-        throw new Exception(e);
-    &#125;
-&#125;
-</code></pre><p>}<br>上面的这种情况，开发人员自己捕获了异常，又手动抛出了异常：Exception，事务同样不会回滚。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Transactional</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">add</span><span class="params">(UserModel userModel)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">         saveData(userModel);</span><br><span class="line">         updateData(userModel);</span><br><span class="line">    &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">        log.error(e.getMessage(), e);</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> Exception(e);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>}<br>上面的这种情况，开发人员自己捕获了异常，又手动抛出了异常：Exception，事务同样不会回滚。</p>
 <p>因为spring事务，默认情况下只会回滚RuntimeException（运行时异常）和Error（错误），对于普通的Exception（非运行时异常），它不会回滚。</p>
 <p>4.自定义了回滚异常<br>在使用@Transactional注解声明事务时，有时我们想自定义回滚的异常，spring也是支持的。可以通过设置rollbackFor参数，来完成这个功能。</p>
 <p>但如果这个参数的值设置错了，就会引出一些莫名其妙的问题，例如：</p>
 <p>@Slf4j<br>@Service<br>public class UserService {</p>
-<pre><code>@Transactional(rollbackFor = BusinessException.class)
-public void add(UserModel userModel) throws Exception &#123;
-   saveData(userModel);
-   updateData(userModel);
-&#125;
-</code></pre><p>}<br>如果在执行上面这段代码，保存和更新数据时，程序报错了，抛了SqlException、DuplicateKeyException等异常。而BusinessException是我们自定义的异常，报错的异常不属于BusinessException，所以事务也不会回滚。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Transactional(rollbackFor = BusinessException.class)</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">add</span><span class="params">(UserModel userModel)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">   saveData(userModel);</span><br><span class="line">   updateData(userModel);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>}<br>如果在执行上面这段代码，保存和更新数据时，程序报错了，抛了SqlException、DuplicateKeyException等异常。而BusinessException是我们自定义的异常，报错的异常不属于BusinessException，所以事务也不会回滚。</p>
 <p>即使rollbackFor有默认值，但阿里巴巴开发者规范中，还是要求开发者重新指定该参数。</p>
 <p>这是为什么呢？</p>
 <p>因为如果使用默认值，一旦程序抛出了Exception，事务不会回滚，这会出现很大的bug。所以，建议一般情况下，将该参数设置成：Exception或Throwable。</p>
 <p>5.嵌套事务回滚多了<br>public class UserService {</p>
-<pre><code>@Autowired
-private UserMapper userMapper;
-
-@Autowired
-private RoleService roleService;
-
-@Transactional
-public void add(UserModel userModel) throws Exception &#123;
-    userMapper.insertUser(userModel);
-    roleService.doOtherThing();
-&#125;
-</code></pre><p>}</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Autowired</span></span><br><span class="line"><span class="keyword">private</span> UserMapper userMapper;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Autowired</span></span><br><span class="line"><span class="keyword">private</span> RoleService roleService;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Transactional</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">add</span><span class="params">(UserModel userModel)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">    userMapper.insertUser(userModel);</span><br><span class="line">    roleService.doOtherThing();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>}</p>
 <p>@Service<br>public class RoleService {</p>
-<pre><code>@Transactional(propagation = Propagation.NESTED)
-public void doOtherThing() &#123;
-    System.out.println(&quot;保存role表数据&quot;);
-&#125;
-</code></pre><p>}<br>这种情况使用了嵌套的内部事务，原本是希望调用roleService.doOtherThing方法时，如果出现了异常，只回滚doOtherThing方法里的内容，不回滚 userMapper.insertUser里的内容，即回滚保存点。。但事实是，insertUser也回滚了。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Transactional(propagation = Propagation.NESTED)</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doOtherThing</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    System.out.println(<span class="string">&quot;保存role表数据&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>}<br>这种情况使用了嵌套的内部事务，原本是希望调用roleService.doOtherThing方法时，如果出现了异常，只回滚doOtherThing方法里的内容，不回滚 userMapper.insertUser里的内容，即回滚保存点。。但事实是，insertUser也回滚了。</p>
 <p>why?</p>
 <p>因为doOtherThing方法出现了异常，没有手动捕获，会继续往上抛，到外层add方法的代理方法中捕获了异常。所以，这种情况是直接回滚了整个事务，不只回滚单个保存点。</p>
 <p>怎么样才能只回滚保存点呢？</p>
 <p>@Slf4j<br>@Service<br>public class UserService {</p>
-<pre><code>@Autowired
-private UserMapper userMapper;
-
-@Autowired
-private RoleService roleService;
-
-@Transactional
-public void add(UserModel userModel) throws Exception &#123;
-
-    userMapper.insertUser(userModel);
-    try &#123;
-        roleService.doOtherThing();
-    &#125; catch (Exception e) &#123;
-        log.error(e.getMessage(), e);
-    &#125;
-&#125;
-</code></pre><p>}<br>可以将内部嵌套事务放在try/catch中，并且不继续往上抛异常。这样就能保证，如果内部嵌套事务中出现异常，只回滚内部事务，而不影响外部事务。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Autowired</span></span><br><span class="line"><span class="keyword">private</span> UserMapper userMapper;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Autowired</span></span><br><span class="line"><span class="keyword">private</span> RoleService roleService;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Transactional</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">add</span><span class="params">(UserModel userModel)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line"></span><br><span class="line">    userMapper.insertUser(userModel);</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        roleService.doOtherThing();</span><br><span class="line">    &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">        log.error(e.getMessage(), e);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>}<br>可以将内部嵌套事务放在try/catch中，并且不继续往上抛异常。这样就能保证，如果内部嵌套事务中出现异常，只回滚内部事务，而不影响外部事务。</p>
 <p>三 其他<br>1 大事务问题<br>在使用spring事务时，有个让人非常头疼的问题，就是大事务问题。</p>
 <p>通常情况下，我们会在方法上@Transactional注解，填加事务功能，比如：</p>
 <p>@Service<br>public class UserService {</p>
-<pre><code>@Autowired 
-private RoleService roleService;
-
-@Transactional
-public void add(UserModel userModel) throws Exception &#123;
-   query1();
-   query2();
-   query3();
-   roleService.save(userModel);
-   update(userModel);
-&#125;
-</code></pre><p>}</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Autowired</span> </span><br><span class="line"><span class="keyword">private</span> RoleService roleService;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Transactional</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">add</span><span class="params">(UserModel userModel)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">   query1();</span><br><span class="line">   query2();</span><br><span class="line">   query3();</span><br><span class="line">   roleService.save(userModel);</span><br><span class="line">   update(userModel);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>}</p>
 <p>@Service<br>public class RoleService {</p>
-<pre><code>@Autowired 
-private RoleService roleService;
-
-@Transactional
-public void save(UserModel userModel) throws Exception &#123;
-   query4();
-   query5();
-   query6();
-   saveData(userModel);
-&#125;
-</code></pre><p>}<br>但@Transactional注解，如果被加到方法上，有个缺点就是整个方法都包含在事务当中了。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Autowired</span> </span><br><span class="line"><span class="keyword">private</span> RoleService roleService;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Transactional</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">save</span><span class="params">(UserModel userModel)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">   query4();</span><br><span class="line">   query5();</span><br><span class="line">   query6();</span><br><span class="line">   saveData(userModel);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>}<br>但@Transactional注解，如果被加到方法上，有个缺点就是整个方法都包含在事务当中了。</p>
 <p>上面的这个例子中，在UserService类中，其实只有这两行才需要事务：</p>
 <p>roleService.save(userModel);<br>update(userModel);<br>在RoleService类中，只有这一行需要事务：</p>
 <p>saveData(userModel);<br>现在的这种写法，会导致所有的query方法也被包含在同一个事务当中。</p>
