@@ -353,4 +353,22 @@ public void doOtherThing() &#123;
         <category>Springboot</category>
       </categories>
   </entry>
+  <entry>
+    <title>面试难点</title>
+    <url>/2021/11/24/%E9%9D%A2%E8%AF%95%E9%9A%BE%E7%82%B9/</url>
+    <content><![CDATA[<p>1、springboot自动装配原理<br>2、代码中的常用设计模式<br>3、ribbon怎么做到负载均衡的<br>4、redis的五种基本数据类型和各自的底层数据结构<br>5、redis为什么这么快<br>6、当有个实例响应速度非常慢的情况下 怎么排查错误<br>7、工厂方法和抽象工厂的应用场景和区别<br>8、double check lock 为什么还要加volatile<br>9、对象的实例化过程、<br>10、jstat -gc -h 10 vmid 5000 显示jvm内存大小<br>        jmap -histo vmid &gt; jmap.log 显示对象内存数量和大小<br>        jstack -l vmid &gt; jstack.log  打印线程堆栈<br>11、top -H 查看线程占用的cpu比例<br>12、ribbon 负载均衡策略 1：轮询 2：随机 3：并发大小 4：响应时长5：过滤失败的服务6：区域轮询7：尝试策略<br>13、线程池隔离的优点 支持异步 支持排队和超时  线程池隔离指的是为每一个服务调用创建一个单独的线程池 就算这个线程池资源消耗完了 也不会影响到其他服务的运行 缺点就是线程池创建比较消耗资源</p>
+<p>14、信号量隔离的优点 ： 单纯的计算 不消耗资源 缺点 不支持任务队列超时也不支持异步  信号量隔离指的是当一个请求过来的时候 先判断信号量是不是达到了系统最大信号值 如果达到了 就返回失败 没达到就返回成功信号量加一</p>
+<p>15、Hystrix常用注解 1：EnableCrucitBreaker 2:HystrixCommand 3:DefaultProperties<br>16、常用jvm调优参数 xms xmx newRatio useG1GC printstack  printstackdetail</p>
+<p>17、堆和栈的区别 栈大小固定 堆大小不固定 因为内存不连续<br>18、事务的一致性怎么保证<br>19、分布式事务怎么保证一致性</p>
+<p>20、死锁的四个条件：1，互斥条件（同一个资源在同一时间只能被一个线程使用） 2，请求保持条件（等待资源的时候不释放自己所拥有的资源） 3，不剥夺条件（当一个线程拿到资源时不能被其他线程剥夺）4，循环等待条件（多个线程循环等待）<br>21、怎么打破死锁</p>
+<p>22、服务注册发现流程</p>
+<p>23、tcp为什么是安全的<br>24、tcp建立连接为什么是三次握手而不是二次或者四次</p>
+<p>25、设计模式的接口隔离原则和依赖倒置原则</p>
+<p>26、myisam为什么不支持行锁</p>
+<p>27、mysql的事务隔离级别  以及底层原理<br>28、浏览器输入一个请求之后的整个流程（域名解析 协议封装）<br>29、自定义线程池的常用参数及其含义</p>
+]]></content>
+      <categories>
+        <category>面试</category>
+      </categories>
+  </entry>
 </search>
