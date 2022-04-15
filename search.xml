@@ -355,7 +355,7 @@ public void doOtherThing() &#123;
   </entry>
   <entry>
     <title>面试难点</title>
-    <url>/2021/04/15/%E9%9D%A2%E8%AF%95%E9%9A%BE%E7%82%B9/</url>
+    <url>/2022/04/15/%E9%9D%A2%E8%AF%95%E9%9A%BE%E7%82%B9/</url>
     <content><![CDATA[<p>1、springboot自动装配原理<br>2、代码中的常用设计模式<br>3、ribbon怎么做到负载均衡的<br>4、redis的五种基本数据类型和各自的底层数据结构<br>5、redis为什么这么快<br>6、当有个实例响应速度非常慢的情况下 怎么排查错误<br>7、工厂方法和抽象工厂的应用场景和区别<br>8、double check lock 为什么还要加volatile<br>9、对象的实例化过程、<br>10、jstat -gc -h 10 vmid 5000 显示jvm内存大小<br>        jmap -histo vmid &gt; jmap.log 显示对象内存数量和大小<br>        jstack -l vmid &gt; jstack.log  打印线程堆栈<br>11、top -H 查看线程占用的cpu比例<br>12、ribbon 负载均衡策略 1：轮询 2：随机 3：并发大小 4：响应时长5：过滤失败的服务6：区域轮询7：尝试策略<br>13、线程池隔离的优点 支持异步 支持排队和超时  线程池隔离指的是为每一个服务调用创建一个单独的线程池 就算这个线程池资源消耗完了 也不会影响到其他服务的运行 缺点就是线程池创建比较消耗资源</p>
 <p>14、信号量隔离的优点 ： 单纯的计算 不消耗资源 缺点 不支持任务队列超时也不支持异步  信号量隔离指的是当一个请求过来的时候 先判断信号量是不是达到了系统最大信号值 如果达到了 就返回失败 没达到就返回成功信号量加一</p>
 <p>15、Hystrix常用注解 1：EnableCrucitBreaker 2:HystrixCommand 3:DefaultProperties<br>16、常用jvm调优参数 xms xmx newRatio useG1GC printstack  printstackdetail</p>
